@@ -47,5 +47,3 @@ jobs:
           tag_name: ${{ steps.read_toml.outputs.value }}
           draft: false
           prerelease: true
-          target_commitish: ${{ github.sha }}
-   
