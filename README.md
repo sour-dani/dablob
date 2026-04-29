@@ -7,6 +7,10 @@ What if it was blob?
 
 *IT COULD BE!?*
 
+![dablob.jpg](dablob.jpg)
+
+[Credits For dablob Mascot Are To TheLetterZed HE Drew This All By Himself Please Go Subscribe To His Channel](https://github.com/theletterzed)
+
 ## Usage
 
 ### makeblob
