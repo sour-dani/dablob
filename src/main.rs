@@ -50,7 +50,7 @@ fn deconstruct_blob() {
             Err(why) => panic!("couldn't read {}: {}", display, why),
             Ok(_) => print!("opened {display}"),
         }
-        let text = match str::from_utf8(&s) {
+        let text = match std::str::from_utf8(&s) {
             Ok(v) => v,
             Err(e) => panic!("{e}"),
         };
