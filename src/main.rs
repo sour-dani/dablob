@@ -6,8 +6,8 @@ use std::path::Path;
 use std::{fs::File, io};
 // A silly program that transforms strings and numbers into binary blobs
 enum Value {
-    Int(i32),
-    Float(f32),
+    Int(i128),
+    Float(f64),
 }
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -57,16 +57,22 @@ fn deconstruct_blob() {
         println!("{text}");
         
     } else { 
-        let mut s: [u8; 4] = [0; 4];
-        match file.read(&mut s) {
-            Err(why) => panic!("couldn't read {}: {}", display, why),
-            Ok(_) => println!("opened {display}"),
-        }
+        
         if blobbed_trim == "int.blob" {
-            let val = i32::from_be_bytes(s);
+            let mut s: [u8; 16] = [0; 16];
+            match file.read(&mut s) {
+                Err(why) => panic!("couldn't read {}: {}", display, why),
+                Ok(_) => println!("opened {display}"),
+            }
+            let val = i128::from_be_bytes(s);
             println!("{val}");
         } else if blobbed_trim == "float.blob" {
-            let val = f32::from_be_bytes(s);
+            let mut s: [u8; 8] = [0; 8];
+            match file.read(&mut s) {
+                Err(why) => panic!("couldn't read {}: {}", display, why),
+                Ok(_) => println!("opened {display}"),
+            }
+            let val = f64::from_be_bytes(s);
             println!("{val}");
         }
     }
@@ -101,9 +107,9 @@ fn construct_blob() {
 }
 
 fn will_it_blob(s: &String) -> Option<Value> {
-    if let Ok(i) = s.trim().parse::<i32>() {
+    if let Ok(i) = s.trim().parse::<i128>() {
         Some(Value::Int(i))
-    } else if let Ok(f) = s.trim().parse::<f32>() {
+    } else if let Ok(f) = s.trim().parse::<f64>() {
         Some(Value::Float(f))
     } else {
         None
