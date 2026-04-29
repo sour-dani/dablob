@@ -1,0 +1,51 @@
+# .github/workflows/release.yml
+# script borrowed with love from beans-rs
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: release ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            filename: 'dablob'
+            target: x86_64-unknown-linux-gnu
+
+          - os: windows-2022
+            target: x86_64-pc-windows-msvc
+            filename: 'dablob.exe'
+
+    steps:
+      - uses: actions/checkout@master
+
+      - uses: SebRollen/toml-action@v1.2.0
+        id: read_toml
+        with:
+          file: 'Cargo.toml'
+          field: 'package.version'
+      
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: nightly-2025-01-10
+          targets: ${{ matrix.target }}
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --target ${{ matrix.target }}
+
+      - name: Upload binaries to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: target/${{ matrix.target }}/release/${{ matrix.filename }}
+          tag_name: ${{ steps.read_toml.outputs.value }}
+          draft: false
+          prerelease: true
+          target_commitish: ${{ github.sha }}
+   
