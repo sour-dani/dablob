@@ -11,7 +11,7 @@ What if it was blob?
 
 ### makeblob
 ```
-./dablob deblob
+./dablob makeblob
 Enter a thing to be blobbed:
 3.333333
 9 bytes worth of blob
