@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - uses: SebRollen/toml-action@v1.2.0
+      - uses: hudsonm62/toml-action@v1
         id: read_toml
         with:
           file: 'Cargo.toml'
@@ -35,13 +35,10 @@ jobs:
           toolchain: nightly-2025-01-10
           targets: ${{ matrix.target }}
 
-      - uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release --target ${{ matrix.target }}
+      - run: cargo build --release --target ${{ matrix.target }}
 
       - name: Upload binaries to release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           files: target/${{ matrix.target }}/release/${{ matrix.filename }}
           tag_name: ${{ steps.read_toml.outputs.value }}
